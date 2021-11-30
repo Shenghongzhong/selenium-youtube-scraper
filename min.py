@@ -1,21 +1,18 @@
-import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-import smtmplib
-
-YOUTUBE_TRENDING_URL = 'https://www.youtube.com/feed/trending'
+YOUTUBE_TRENDING_URL = "https://www.youtube.com/feed/trending"
 
 def get_driver():
   chrome_options = Options()
   chrome_options.add_argument('--no-sandbox')
   chrome_options.add_argument('--headless')
-  chrome_options.add_argument('--disable-dev-shm-usage')
+  chrome_options.add_argument('--disable-dev-shm-useage')
   driver = webdriver.Chrome(options=chrome_options)
   return driver
 
-def get_videos(driver):
+def get_videos():
   VIDEO_DIV_TAG = 'ytd-video-renderer'
   driver.get(YOUTUBE_TRENDING_URL)
   videos = driver.find_elements(By.TAG_NAME, VIDEO_DIV_TAG)
@@ -42,42 +39,43 @@ def parse_video(video):
     'description': description
   }
 
-  def send_email():
-    try:
-      server_ssl= smtplib.SMTP_SSL('smtp.gmail.com',465)
-      server_ssl.ehlo()
 
-      send_from= SENDER_EMAIL
-      to= [ [RECEIVER_EMAIL]]
-      subject = 'Test message from replit'
-      body = 'Hey, this is a test from Replit (live workshop'
 
-      email_text = f"""\
-      From:{SENDER_EMAIL}
-      To:{RECEIVER_EMAIL}
-      Subject: {subject}
 
-      {body}
-      """
-
-      server.login(SENDER_EMAIL,)
-    except:
 
 
 
 if __name__ == "__main__":
-  print('Creating driver')
+  print("Creating driver")
   driver = get_driver()
 
-  print('Fetching trending videos')
-  videos = get_videos(driver)
-  
-  print(f'Found {len(videos)} videos')
+  print('Fetching the page')
+  driver.get(YOUTUBE_TRENDING_URL)
 
-  print('Parsing top 10 videos')
-  videos_data = [parse_video(video) for video in videos[:10]]
+  print( 'Get the video divs')
   
-  print('Save the data to a CSV')
-  videos_df = pd.DataFrame(videos_data)
-  print(videos_df)
-  videos_df.to_csv('trending.csv', index=None)
+
+  driver.find_elements(By.TAG_NAME,VIDEO_DIV_TAG)
+
+  print(f'Found {len(VIDEO_DIV_TAG)} videos')
+
+  print('Parsing the first video')
+
+  # title, url, thumbnail_url, channel, views, uploaded, description
+
+  video =videos [0]
+
+  title_tag = video.find_element(By.ID, 'video-title')
+  title = title.tag.text
+  url = title_tag.get_attribute('href')
+
+  thumbnail_tag = video.find_element(By.Tag_name,'img')
+  thumbnail_url = thumbnail_tag.get_attribute('src')
+
+  channel_div = video.find_element(By.CLASS_NAME,'ytd-channel-name')
+  channel_name
+  description = video.find_element(By.ID, '')
+
+  
+
+
